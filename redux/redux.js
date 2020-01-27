@@ -4,8 +4,9 @@ const redux = require("redux");
 
 const addTodo = (task) => ({ type: "ADD_TODO", task });
 
-const removeTodo = (task) => {
-  return ({ type: "REMOVE_TODO", task })}
+const removeTodo = (task) => ({ type: "REMOVE_TODO", task });
+
+const patchTodo = (task) => ({ type: "PATCH_TODO", task });
 
 // reducer
 
@@ -17,8 +18,21 @@ const reducer = (state = { projects: [] }, action) => {
     case "REMOVE_TODO": {
       let returnState = [...state.projects];
       returnState = returnState.filter((elem) => {
-        return elem.id !== action.task[0].id});
+        return elem.id !== action.task[0].id;
+      });
       return { projects: returnState };
+    }
+    case "PATCH_TODO": {
+      let patchBody = action.task;
+      let returnState = [...state.projects];
+      returnState = returnState.map((project) => {
+        if (project.id === patchBody.id) {
+          for (let key in patchBody) {
+            project[key] = patchBody[key];
+          }
+        }
+        return project;
+      });
     }
   }
   return state;
@@ -32,4 +46,5 @@ module.exports = {
   store,
   addTodo,
   removeTodo,
+  patchTodo,
 };

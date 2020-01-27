@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const builds = require("./builds");
-const { store, addTodo, removeTodo } = require("../../../redux/redux");
+const { store, addTodo, removeTodo, patchTodo } = require("../../../redux/redux");
 const ids = require('short-id')
 
 router.get("/", (req, res) => {
@@ -25,7 +25,11 @@ router.get("/:projectId", (req, res) => {
 
 router.patch("/:projectId", (req, res) => {
   const { projectId } = req.params;
-  const { project } = req.body;
+  const project  = req.body;
+  const toBePatched = store.getState().projects.filter(project => project.id === projectId);
+  project.id = projectId;
+  const patchAction = patchTodo(project);
+  store.dispatch(patchAction);
   res.status(418).json({ message: "Not Implemented" });
 });
 
