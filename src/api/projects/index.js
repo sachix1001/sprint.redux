@@ -1,27 +1,31 @@
 const router = require("express").Router();
 const builds = require("./builds");
+const { store, addTodo, removeTodo } = require("../../../redux/redux");
+const ids = require('short-id')
 
 router.get("/", (req, res) => {
-  // TODO retrieve and send all projects
-  res.status(418).json({ message: "Not Implemented" });
+  res.status(418).json(store.getState());
 });
 
 router.post("/", (req, res) => {
-  const { project } = req.body;
-  // TODO Add new project, give it an id and send it back.
-  res.status(418).json({ message: "Not Implemented" });
+  const project = req.body;
+  const id = ids.generate();
+  project.id = id;
+  const action = addTodo(project);
+  store.dispatch(action);
+
+  res.status(200).json(project);
 });
 
 router.get("/:projectId", (req, res) => {
   const { projectId } = req.params;
-  // TODO retrieve and send project with given id
-  res.status(418).json({ message: "Not Implemented" });
+  const result = store.getState().projects.filter(project => project.id === projectId)
+  res.status(200).json(result[0]);
 });
 
 router.patch("/:projectId", (req, res) => {
   const { projectId } = req.params;
   const { project } = req.body;
-  // TODO edit a projects information. Make sure to validate whats being sent!
   res.status(418).json({ message: "Not Implemented" });
 });
 
