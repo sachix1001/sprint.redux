@@ -31,8 +31,10 @@ router.patch("/:projectId", (req, res) => {
 
 router.delete("/:projectId", (req, res) => {
   const { projectId } = req.params;
-  // TODO delete project, return status 200 with no body on success
-  res.status(418).json({ message: "Not Implemented" });
+  const toBeDeleted = store.getState().projects.filter(project => project.id === projectId);
+  const deleteAction = removeTodo(toBeDeleted);
+  store.dispatch(deleteAction);
+  res.status(200).json();
 });
 
 router.use("/:projectId/builds", builds);

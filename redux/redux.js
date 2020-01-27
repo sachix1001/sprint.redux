@@ -4,20 +4,20 @@ const redux = require("redux");
 
 const addTodo = (task) => ({ type: "ADD_TODO", task });
 
-const removeTodo = (task) => ({ type: "REMOVE_TODO", task });
+const removeTodo = (task) => {
+  return ({ type: "REMOVE_TODO", task })}
 
 // reducer
 
 const reducer = (state = { projects: [] }, action) => {
-  // console.log('wired',action)
   switch (action.type) {
     case "ADD_TODO": {
-      // console.log({ projects: [...state.projects, action.task] })
       return { projects: [...state.projects, action.task] };
     }
     case "REMOVE_TODO": {
       let returnState = [...state.projects];
-      returnState = returnState.filter((elem) => elem.id !== action.task.id);
+      returnState = returnState.filter((elem) => {
+        return elem.id !== action.task[0].id});
       return { projects: returnState };
     }
   }
