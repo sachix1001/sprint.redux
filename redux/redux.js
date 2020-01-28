@@ -3,16 +3,15 @@ const redux = require("redux");
 // actions
 
 const addTodo = (task) => ({ type: "ADD_TODO", task });
-
 const removeTodo = (task) => ({ type: "REMOVE_TODO", task });
-
 const patchTodo = (task) => ({ type: "PATCH_TODO", task });
-
+const addBuild = (task) => ({ type: "ADD_BUILD", task });
 // reducer
 
 const reducer = (state = { projects: [] }, action) => {
   switch (action.type) {
     case "ADD_TODO": {
+      action.task.builds = [];
       return { projects: [...state.projects, action.task] };
     }
     case "REMOVE_TODO": {
@@ -34,6 +33,16 @@ const reducer = (state = { projects: [] }, action) => {
         return project;
       });
     }
+    case "ADD_BUILD": {
+      const projectId = action.task.id;
+      const { buildNumber, status, output } = action.task;
+      const projects = store.getState().projects.map((project) => {
+        if (project.id === projectId) {
+          project.builds.push({ buildNumber, status, output });
+        }
+      });
+      return projects;
+    }
   }
   return state;
 };
@@ -47,4 +56,5 @@ module.exports = {
   addTodo,
   removeTodo,
   patchTodo,
+  addBuild
 };

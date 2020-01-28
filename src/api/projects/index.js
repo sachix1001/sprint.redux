@@ -26,11 +26,12 @@ router.get("/:projectId", (req, res) => {
 router.patch("/:projectId", (req, res) => {
   const { projectId } = req.params;
   const project  = req.body;
-  const toBePatched = store.getState().projects.filter(project => project.id === projectId);
+  // const toBePatched = store.getState().projects.filter(project => project.id === projectId);
   project.id = projectId;
   const patchAction = patchTodo(project);
   store.dispatch(patchAction);
-  res.status(418).json({ message: "Not Implemented" });
+  const result = store.getState().projects.filter(project => project.id === projectId)
+  res.status(200).json(result[0]);
 });
 
 router.delete("/:projectId", (req, res) => {
